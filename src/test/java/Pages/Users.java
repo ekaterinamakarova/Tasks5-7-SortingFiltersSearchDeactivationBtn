@@ -47,7 +47,7 @@ public class Users {
     @FindBy(xpath = "//span[contains(text(),'Special offers')]/../..//span//input") private WebElement SpecialOffersCheckbox;
     @FindBy(css = "tr td:nth-of-type(5) svg") private List<WebElement> points;
     @FindBy(xpath = "//span[contains(text(),'Features...')]") private WebElement featuresBtn;
-    @FindBy(xpath = "//span[contains(text(),'Deactivate')]") private WebElement deactivateFeature;
+    @FindBy(xpath = "//div[2]/div[2]/div[1]/button[1]") private WebElement deactivateFeature;
     @FindBy(xpath = "//span[contains(text(),'CLOSE')]") private WebElement closeBtn;
     @FindBy(css = "input[placeholder='Search by keyword']") private WebElement searchTextBox;
 
