@@ -14,13 +14,14 @@ public class PriceCalendar {
         PageFactory.initElements(driver,this);
     }
 
-    @FindBy(xpath = "//span[contains(text(),'LAUNCH SPECIAL')]/..") private WebElement launchSpecialButton;
+    @FindBy(xpath = "//span[contains(text(),'LAUNCH SPECIAL')]/../..") private WebElement launchSpecialButton;
 
-    public void checkButtonDeactivation(){
-        Assert.assertFalse(launchSpecialButton.isEnabled());
+    public void checkButtonDeactivation() throws InterruptedException {
+        Thread.sleep(500);
+       Assert.assertFalse(launchSpecialButton.getAttribute("title").isEmpty());
     }
 
     public void checkButtonActivation(){
-        Assert.assertTrue(launchSpecialButton.isEnabled());
+        Assert.assertTrue(launchSpecialButton.getAttribute("title").isEmpty());
     }
 }
