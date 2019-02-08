@@ -79,12 +79,12 @@ public class TestClass {
     public void deactivateOffer() throws InterruptedException, IOException {
         initial.toUsersPage();
         users.search("autoAccountHO@autoAccountHO.com");
-        users.activationDeaktivation();
+        String value = users.activationDeaktivation();
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
         initial.toPriceCalendar();
-        priceCalendar.checkButtonDeactivation();
+        priceCalendar.checkButtonActivation(value);
     }
 
     @Test(description = "Activation of special offer", dependsOnMethods = {"deactivateOffer"})
@@ -94,12 +94,12 @@ public class TestClass {
         signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
         initial.toUsersPage();
         users.search("autoAccountHO@autoAccountHO.com");
-        users.activationDeaktivation();
+        String value = users.activationDeaktivation();
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
         initial.toPriceCalendar();
-        priceCalendar.checkButtonActivation();
+        priceCalendar.checkButtonActivation(value);
     }
 
 
