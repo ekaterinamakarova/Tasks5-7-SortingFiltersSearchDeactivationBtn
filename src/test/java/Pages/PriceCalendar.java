@@ -9,19 +9,29 @@ import org.testng.Assert;
 public class PriceCalendar {
 
     WebDriver driver;
+    Users users;
     public PriceCalendar(WebDriver driver){
         this.driver=driver;
         PageFactory.initElements(driver,this);
+        users= new Users(driver);
     }
 
     @FindBy(xpath = "//span[contains(text(),'LAUNCH SPECIAL')]/../..") private WebElement launchSpecialButton;
 
-    public void checkButtonDeactivation() throws InterruptedException {
-        Thread.sleep(500);
-       Assert.assertFalse(launchSpecialButton.getAttribute("title").isEmpty());
+
+
+    public void checkButtonActivation(String value) throws InterruptedException {
+        if(value.equals("DEACTIVATE")) {
+            Assert.assertFalse(launchSpecialButton.getAttribute("title").isEmpty());
+        }
+        else if (value.equals("DEACTIVATE")) {
+            Assert.assertTrue(launchSpecialButton.getAttribute("title").isEmpty());
+        }
+        else {
+            Assert.assertEquals(false,true);
+        }
+
     }
 
-    public void checkButtonActivation(){
-        Assert.assertTrue(launchSpecialButton.getAttribute("title").isEmpty());
-    }
+
 }
