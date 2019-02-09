@@ -48,6 +48,7 @@ public class Users {
     @FindBy(css = "tr td:nth-of-type(5) svg") private List<WebElement> points;
     @FindBy(xpath = "//span[contains(text(),'Features...')]") private WebElement featuresBtn;
     @FindBy(xpath = "//p[contains(text(),'Post Special Offers')]/..//button") private WebElement deactivateFeature;
+    @FindBy(xpath = "//ul[1]/div[3]/div[1]/span[1]")  private WebElement suspendReactivateButton;
     @FindBy(xpath = "//span[contains(text(),'CLOSE')]") private WebElement closeBtn;
     @FindBy(css = "input[placeholder='Search by keyword']") private WebElement searchTextBox;
 
@@ -152,7 +153,6 @@ public class Users {
             previousPageButton.click();
         }
         while (previousPageButton.isEnabled());
-
     }
 
     public void allFilters() {
@@ -251,8 +251,6 @@ public class Users {
             }
         }
         while (nextPageButton.isEnabled());
-
-
     }
 
     public void searchCheck(String username, String compName, String compType) throws InterruptedException {
@@ -318,12 +316,15 @@ public class Users {
         deactivateFeature.click();
         closeBtn.click();
         return btnText;
-
     }
 
-
-
-
-
+    public String suspendReactivate() throws InterruptedException {
+        points.get(0).click();
+        Thread.sleep(200);
+        suspendReactivateButton.click();
+        String btnText = suspendReactivateButton.getText();
+        System.out.println(btnText);
+        return btnText;
     }
+}
 
