@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 public class TestClass {
 
@@ -45,66 +46,94 @@ public class TestClass {
         signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
     }
 
-//    @Test(description = "Users page sorting checking", dependsOnMethods = {"login"})
-//    public void usersChecking() throws  InterruptedException, AWTException {
-//        initial.toUsersPage();
-//        driver.navigate().refresh();
-//        users.sort();
-//    }
-//
-//    @Test(description = "Filters checking at Users page", dependsOnMethods = {"usersChecking"})
-//    public void filterChecking() throws InterruptedException, AWTException {
-//        users.allFilters();
-//        users.specialOfferFilter();
-//        users.hotel_activeFilter();
-//        users.hotel_suspendedFilter();
-//        users.tourOperator_suspendedFilter();
-//        users.tourOperator_activeFilter();
-//    }
-//
-//    @Test(description = "Search checking at Users page", dependsOnMethods = {"filterChecking"})
-//    public void searchChecking() throws InterruptedException {
-//        driver.navigate().refresh();
-//        users.searchCheck("123", "FLEXAR", "HOTEL");
-//    }
+   @Test(description = "Users page sorting checking", dependsOnMethods = {"login"})
+   public void usersChecking() throws  InterruptedException, AWTException {
+       initial.toUsersPage();
+       driver.navigate().refresh();
+       users.sort();
+   }
 
-//    @Test(description = "Actions Log page's sorting and search checking", dependsOnMethods = {"searchChecking"})
-//    public void actionsLogCheck() throws InterruptedException, AWTException {
-//        initial.toActionsLog();
-//        actionsLog.sorting();
-//        actionsLog.search("31", "Super Admin");
-//    }
+   @Test(description = "Filters checking at Users page", dependsOnMethods = {"usersChecking"})
+   public void filterChecking() throws InterruptedException, AWTException {
+       users.allFilters();
+       users.specialOfferFilter();
+       users.hotel_activeFilter();
+       users.hotel_suspendedFilter();
+       users.tourOperator_suspendedFilter();
+       users.tourOperator_activeFilter();
+   }
 
-    @Test(description = "Deactivation of special offer", dependsOnMethods = {"login"})
-    public void deactivateOffer() throws InterruptedException, IOException {
+   @Test(description = "Search checking at Users page", dependsOnMethods = {"filterChecking"})
+   public void searchChecking() throws InterruptedException {
+       driver.navigate().refresh();
+       users.searchCheck("123", "FLEXAR", "HOTEL");
+   }
+
+   @Test(description = "Actions Log page's sorting and search checking", dependsOnMethods = {"searchChecking"})
+   public void actionsLogCheck() throws InterruptedException, AWTException {
+       initial.toActionsLog();
+       actionsLog.sorting();
+       actionsLog.search("31", "Super Admin");
+   }
+
+    @Test(description = "Deactivation/Activation of special offer", dependsOnMethods = {"login"})
+    public void deactivateOffer() throws InterruptedException, IOException, ParseException {
         initial.toUsersPage();
-        users.search("autoAccountHO@autoAccountHO.com");
-        String value = users.activationDeaktivation();
+        users.search(readerClass.readFromFile(3));
+        String value1 = users.activationDeaktivation();
+        initial.toActionsLog();
+        actionsLog.timestampActionCheck(value1, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
         initial.toPriceCalendar();
-        priceCalendar.checkButtonActivation(value);
-    }
-
-    @Test(description = "Activation of special offer", dependsOnMethods = {"deactivateOffer"})
-    public void activateOffer() throws InterruptedException, IOException {
+        priceCalendar.checkButtonActivation(value1);
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
         initial.toUsersPage();
-        users.search("autoAccountHO@autoAccountHO.com");
-        String value = users.activationDeaktivation();
+        users.search(readerClass.readFromFile(3));
+        String value2 = users.activationDeaktivation();
+        initial.toActionsLog();
+        actionsLog.timestampActionCheck(value2, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
         initial.toPriceCalendar();
-        priceCalendar.checkButtonActivation(value);
+        priceCalendar.checkButtonActivation(value2);
+        initial.logOut();
+        initial.toSignPage();
+        signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
     }
 
+    @Test(description = "Suspend user action and its checking", dependsOnMethods = {"deactivateOffer"})
+    public void suspendUser() throws InterruptedException, IOException, ParseException {
+        initial.toUsersPage();
+        users.search("autoAccountHO@autoAccountHO.com");
+        String value = users.suspendReactivate();
+        initial.toActionsLog();
+        actionsLog.timestampActionCheck(value, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
+        if (value.equals("Suspend")) {
+            initial.logOut();
+            initial.toSignPage();
+            signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
+            signIn.suspendReactivateCheck(value);
+            driver.navigate().refresh();
+        } 
+        else if (value.equals("Reactivate")) {
+            initial.logOut();
+            initial.toSignPage();
+            signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
+            signIn.suspendReactivateCheck(value);
+            initial.logOut();
+            driver.navigate().refresh();
+            initial.toSignPage();
+        }
+        signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
+    }
 
     @AfterTest
     public void exit () {
-        //driver.quit();
+        driver.quit();
     }
 }
