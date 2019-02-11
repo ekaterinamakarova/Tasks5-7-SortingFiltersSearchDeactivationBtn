@@ -38,4 +38,8 @@ public class SignIn {
             Assert.assertEquals(false,true);
         }
     }
+    
+    public void resetPasswordCheck(){
+        Assert.assertEquals(wrongLoginHint.getText(), "Wrong Email or Password");
+    }
 }
