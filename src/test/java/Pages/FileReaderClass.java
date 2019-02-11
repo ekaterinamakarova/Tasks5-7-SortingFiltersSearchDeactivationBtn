@@ -18,7 +18,6 @@ public class FileReaderClass {
             lines.add(line);
         }
         return (lines.get(k));
-
     }
 
 }
