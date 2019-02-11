@@ -30,12 +30,9 @@ public class HelperClass {
         return getWebDriverWait().until(ExpectedConditions.stalenessOf(element));
     }
 
-
-
     public void implicitWait(WebDriver driver) {
         driver.manage().timeouts().implicitlyWait(10, SECONDS);
     }
-
 
     public Wait<WebDriver> getWebDriverWait() {
         return (Wait<WebDriver>) new FluentWait<>(driver)
@@ -58,16 +55,4 @@ public class HelperClass {
     public void assertText(String text, WebElement element){
         Assert.assertEquals(text, element.getText());
     }
-
-
-
 }
-
-
-
-
-
-
-
-
-
