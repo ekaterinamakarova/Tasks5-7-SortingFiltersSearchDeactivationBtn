@@ -7,7 +7,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import java.awt.*;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,12 +17,14 @@ public class ActionsLog {
     WebDriver driver;
     Users users;
     Date date;
+    SimpleDateFormat simpleDateFormat;
 
     public ActionsLog(WebDriver driver){
         this.driver=driver;
         PageFactory.initElements(driver,this);
         users = new Users(driver);
         date =  new Date();
+        simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
     }
 
     @FindBy(xpath = "//tr//td[1]") private List<WebElement> timestampColumn;
@@ -34,10 +35,9 @@ public class ActionsLog {
     @FindBy(css = "button[aria-label='Next Page']") private WebElement nextPageButton;
     @FindBy(css = "input[placeholder='Search by keyword']") private WebElement searchTextBox;
 
-
     public void sorting() throws InterruptedException {
         Thread.sleep(200);
-        users.sortingByOrderReverse(timestampColumn,timestampButton);
+//        users.sortingByOrderReverse(timestampColumn,timestampButton);
         actionButton.click();
         users.sortingByOrder(actionColumn,actionButton);
     }
@@ -48,8 +48,8 @@ public class ActionsLog {
         users.checkSearchResult(text2,actionColumn);
     }
 
-    public void timestampActionCheck(String value, String first,String second, String third) throws ParseException {
-        String dateTime = timestampColumn.get(0).getText();
+    public void timestampActionCheck(String dateValue, String value, String first,String second, String third) {
+        Assert.assertEquals(timestampColumn.get(0).getText(), dateValue);
 
         if (value.equals("DEACTIVATE")) {
             Assert.assertEquals(actionColumnAll.get(0).getText(), first + " deactivated feature Special offer for " + second + " from " + third);
@@ -67,7 +67,5 @@ public class ActionsLog {
             Assert.assertEquals(false, true);
         }
     }
-}
-
-
+    }
 
