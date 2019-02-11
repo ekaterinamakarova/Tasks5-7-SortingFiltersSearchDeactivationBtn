@@ -145,6 +145,28 @@ public class TestClass {
             }
         }
     }
+    @Test(description = "Reset password test", dependsOnMethods = {"login"})
+    public void reset() throws InterruptedException, IOException {
+        initial.toUsersPage();
+        users.search("autoAccountHO@autoAccountHO.com");
+        users.resetPassword();
+        initial.logOut();
+        initial.toSignPage();
+        signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
+        signIn.resetPasswordCheck();
+    }
+
+    @Test(description = "Delete user test", dependsOnMethods = {"reset"})
+    public void delete() throws IOException, InterruptedException {
+        driver.navigate().refresh();
+        signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
+        initial.toUsersPage();
+        users.search("autoAccountHO@autoAccountHO.com");
+        users.deleteUser();
+
+
+
+    }
 
     @AfterTest
     public void exit () {
