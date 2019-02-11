@@ -44,7 +44,6 @@ public class TestClass {
         priceCalendar =  new PriceCalendar(driver);
         date =  new Date();
         simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
-
     }
 
     @Test(description = "Login with credentials")
@@ -144,13 +143,11 @@ public class TestClass {
                 }
                 signIn.signin(readerClass.readFromFile(1), readerClass.readFromFile(2));
             }
-
-
         }
     }
 
     @AfterTest
     public void exit () {
-        //driver.quit();
+        driver.quit();
     }
 }
