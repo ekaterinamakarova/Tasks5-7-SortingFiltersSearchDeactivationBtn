@@ -108,29 +108,35 @@ public class TestClass {
 
     @Test(description = "Suspend user action and its checking", dependsOnMethods = {"deactivateOffer"})
     public void suspendUser() throws InterruptedException, IOException, ParseException {
-        initial.toUsersPage();
-        users.search("autoAccountHO@autoAccountHO.com");
-        String value = users.suspendReactivate();
-        initial.toActionsLog();
-        actionsLog.timestampActionCheck(value, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
-        if (value.equals("Suspend")) {
-            initial.logOut();
-            initial.toSignPage();
-            signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
-            signIn.suspendReactivateCheck(value);
-            driver.navigate().refresh();
-        } 
-        else if (value.equals("Reactivate")) {
-            initial.logOut();
-            initial.toSignPage();
-            signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
-            signIn.suspendReactivateCheck(value);
-            initial.logOut();
-            driver.navigate().refresh();
-            initial.toSignPage();
+        for (int i = 0; ; i++) {
+            if (i > 1) {
+                break;
+            } else {
+                initial.toUsersPage();
+                users.search("autoAccountHO@autoAccountHO.com");
+                String value = users.suspendReactivate();
+                initial.toActionsLog();
+                actionsLog.timestampActionCheck(value, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5));
+                if (value.equals("Suspend")) {
+                    initial.logOut();
+                    initial.toSignPage();
+                    signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
+                    signIn.suspendReactivateCheck(value);
+                    driver.navigate().refresh();
+                } else if (value.equals("Reactivate")) {
+                    initial.logOut();
+                    initial.toSignPage();
+                    signIn.signin(readerClass.readFromFile(3), readerClass.readFromFile(4));
+                    signIn.suspendReactivateCheck(value);
+                    initial.logOut();
+                    driver.navigate().refresh();
+                    initial.toSignPage();
+                }
+                signIn.signin(readerClass.readFromFile(1), readerClass.readFromFile(2));
+            }
+
+
         }
-        signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
-    }
 
     @AfterTest
     public void exit () {
