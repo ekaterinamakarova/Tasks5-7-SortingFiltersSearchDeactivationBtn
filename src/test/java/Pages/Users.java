@@ -8,15 +8,15 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
 
 public class Users {
 
     WebDriver driver;
     HelperClass helper;
+
 
     public Users(WebDriver driver) {
         this.driver = driver;
@@ -54,22 +54,16 @@ public class Users {
 
     public void sort() throws InterruptedException {
         Thread.sleep(200);
-        System.out.println("------------------------------------------1--------------------------------");
         sortingByOrder(usernameColumn, usernameSortBtn);
-        System.out.println("------------------------------------------2--------------------------------");
         helper.scrollToElement(pageTitle);
         companyNameSortBtn.click();
         sortingByOrderReverse(companyNameColumn, companyNameSortBtn);
-        System.out.println("------------------------------------------3--------------------------------");
         helper.scrollToElement(pageTitle);
         companyTypeBtn.click();
         sortingByOrder(companyTypeColumn, companyTypeBtn);
-        System.out.println("------------------------------------------4---------------------------------");
         helper.scrollToElement(pageTitle);
         statusButton.click();
         sortingByOrderReverse(statusColumn, statusButton);
-
-
     }
 
     public void sortingByOrder(List<WebElement> column, WebElement button) throws InterruptedException {
@@ -85,13 +79,10 @@ public class Users {
                 sortedList.add(s);
             }
             Collections.sort(sortedList, String.CASE_INSENSITIVE_ORDER);
-            System.out.println(obtainedList);
-            System.out.println(sortedList);
             Assert.assertTrue(obtainedList.equals(sortedList));
             nextPageButton.click();
         }
         while (nextPageButton.isEnabled());
-
         helper.scrollToElement(pageTitle);
         button.click();
 
@@ -105,13 +96,10 @@ public class Users {
                 sortedList.add(s);
             }
             Collections.sort(sortedList, Collections.reverseOrder());
-            System.out.println(obtainedList);
-            System.out.println(sortedList);
             Assert.assertTrue(sortedList.equals(obtainedList));
             previousPageButton.click();
         }
         while (previousPageButton.isEnabled());
-
     }
 
 
@@ -127,8 +115,6 @@ public class Users {
                 sortedList.add(s);
             }
             Collections.sort(sortedList, Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
-            System.out.println(obtainedList);
-            System.out.println(sortedList);
             Assert.assertTrue(obtainedList.equals(sortedList));
             nextPageButton.click();
         }
@@ -147,8 +133,6 @@ public class Users {
                 sortedList.add(s);
             }
             Collections.sort(sortedList, String.CASE_INSENSITIVE_ORDER);
-            System.out.println(obtainedList);
-            System.out.println(sortedList);
             Assert.assertTrue(sortedList.equals(obtainedList));
             previousPageButton.click();
         }
@@ -181,7 +165,6 @@ public class Users {
             closeBtn.click();
             Thread.sleep(500);
         }
-
     }
 
     public void hotel_activeFilter() throws AWTException, InterruptedException {
@@ -251,6 +234,8 @@ public class Users {
             }
         }
         while (nextPageButton.isEnabled());
+
+
     }
 
     public void searchCheck(String username, String compName, String compType) throws InterruptedException {
@@ -292,7 +277,6 @@ public class Users {
             for (WebElement we : column) {
                 resultList_column.add(we.getText());
             }
-
             for (String s : resultList_column) {
                 if (s.contains(text)) {
                     result = true;
@@ -323,7 +307,6 @@ public class Users {
         Thread.sleep(200);
         suspendReactivateButton.click();
         String btnText = suspendReactivateButton.getText();
-        System.out.println(btnText);
         return btnText;
     }
 }
