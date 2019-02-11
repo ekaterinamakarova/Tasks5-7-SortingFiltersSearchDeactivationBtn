@@ -8,8 +8,11 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TestClass {
 
@@ -21,6 +24,8 @@ public class TestClass {
     private Users users;
     private ActionsLog actionsLog;
     private PriceCalendar priceCalendar;
+    Date date;
+    SimpleDateFormat simpleDateFormat;
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -37,6 +42,8 @@ public class TestClass {
         users= new Users(driver);
         actionsLog = new ActionsLog(driver);
         priceCalendar =  new PriceCalendar(driver);
+        date =  new Date();
+        simpleDateFormat = new SimpleDateFormat("dd MMM yyyy hh:mm:ss");
 
     }
 
@@ -46,43 +53,44 @@ public class TestClass {
         signIn.signin(readerClass.readFromFile(1),readerClass.readFromFile(2));
     }
 
-   @Test(description = "Users page sorting checking", dependsOnMethods = {"login"})
-   public void usersChecking() throws  InterruptedException, AWTException {
-       initial.toUsersPage();
-       driver.navigate().refresh();
-       users.sort();
-   }
+    @Test(description = "Users page sorting checking", dependsOnMethods = {"login"})
+    public void usersChecking() throws  InterruptedException, AWTException {
+        initial.toUsersPage();
+        driver.navigate().refresh();
+        users.sort();
+    }
 
-   @Test(description = "Filters checking at Users page", dependsOnMethods = {"usersChecking"})
-   public void filterChecking() throws InterruptedException, AWTException {
-       users.allFilters();
-       users.specialOfferFilter();
-       users.hotel_activeFilter();
-       users.hotel_suspendedFilter();
-       users.tourOperator_suspendedFilter();
-       users.tourOperator_activeFilter();
-   }
+    @Test(description = "Filters checking at Users page", dependsOnMethods = {"usersChecking"})
+    public void filterChecking() throws InterruptedException, AWTException {
+        users.allFilters();
+        users.specialOfferFilter();
+        users.hotel_activeFilter();
+        users.hotel_suspendedFilter();
+        users.tourOperator_suspendedFilter();
+        users.tourOperator_activeFilter();
+    }
 
-   @Test(description = "Search checking at Users page", dependsOnMethods = {"filterChecking"})
-   public void searchChecking() throws InterruptedException {
-       driver.navigate().refresh();
-       users.searchCheck("123", "FLEXAR", "HOTEL");
-   }
+    @Test(description = "Search checking at Users page", dependsOnMethods = {"filterChecking"})
+    public void searchChecking() throws InterruptedException {
+        driver.navigate().refresh();
+        users.searchCheck("123", "FLEXAR", "HOTEL");
+    }
 
-   @Test(description = "Actions Log page's sorting and search checking", dependsOnMethods = {"searchChecking"})
-   public void actionsLogCheck() throws InterruptedException, AWTException {
-       initial.toActionsLog();
-       actionsLog.sorting();
-       actionsLog.search("31", "Super Admin");
-   }
+    @Test(description = "Actions Log page's sorting and search checking", dependsOnMethods = {"searchChecking"})
+    public void actionsLogCheck() throws InterruptedException, AWTException {
+        initial.toActionsLog();
+        actionsLog.sorting();
+        actionsLog.search("31", "Super Admin");
+    }
 
-    @Test(description = "Deactivation/Activation of special offer", dependsOnMethods = {"login"})
+    @Test(description = "Deactivation/Activation of special offer", dependsOnMethods = {"actionsLogCheck"})
     public void deactivateOffer() throws InterruptedException, IOException, ParseException {
         initial.toUsersPage();
         users.search(readerClass.readFromFile(3));
         String value1 = users.activationDeaktivation();
+        String dateNow1 = simpleDateFormat.format(date);
         initial.toActionsLog();
-        actionsLog.timestampActionCheck(value1, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
+        actionsLog.timestampActionCheck(dateNow1, value1, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
@@ -94,8 +102,9 @@ public class TestClass {
         initial.toUsersPage();
         users.search(readerClass.readFromFile(3));
         String value2 = users.activationDeaktivation();
+        String dateNow2 = simpleDateFormat.format(date);
         initial.toActionsLog();
-        actionsLog.timestampActionCheck(value2, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) );
+        actionsLog.timestampActionCheck(dateNow2,value2, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5) ); 
         initial.logOut();
         initial.toSignPage();
         signIn.signin(readerClass.readFromFile(3),readerClass.readFromFile(4));
@@ -115,8 +124,9 @@ public class TestClass {
                 initial.toUsersPage();
                 users.search("autoAccountHO@autoAccountHO.com");
                 String value = users.suspendReactivate();
+                String dateNow = simpleDateFormat.format(date);
                 initial.toActionsLog();
-                actionsLog.timestampActionCheck(value, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5));
+                actionsLog.timestampActionCheck(dateNow,value, readerClass.readFromFile(2), readerClass.readFromFile(4), readerClass.readFromFile(5));///
                 if (value.equals("Suspend")) {
                     initial.logOut();
                     initial.toSignPage();
@@ -137,9 +147,10 @@ public class TestClass {
 
 
         }
+    }
 
     @AfterTest
     public void exit () {
-        driver.quit();
+        //driver.quit();
     }
 }
