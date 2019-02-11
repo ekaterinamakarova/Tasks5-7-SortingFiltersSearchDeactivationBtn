@@ -51,6 +51,8 @@ public class Users {
     @FindBy(xpath = "//ul[1]/div[3]/div[1]/span[1]")  private WebElement suspendReactivateButton;
     @FindBy(xpath = "//span[contains(text(),'CLOSE')]") private WebElement closeBtn;
     @FindBy(css = "input[placeholder='Search by keyword']") private WebElement searchTextBox;
+    @FindBy(xpath = "//span[contains(text(),'Reset password')]") private WebElement resetPasswordBtn;
+    @FindBy(xpath = "//span[contains(text(),'Delete')]") private WebElement deleteUserBtn;
 
     public void sort() throws InterruptedException {
         Thread.sleep(200);
@@ -308,6 +310,17 @@ public class Users {
         suspendReactivateButton.click();
         String btnText = suspendReactivateButton.getText();
         return btnText;
+    }
+    
+    public void resetPassword(){
+        points.get(0).click();
+        resetPasswordBtn.click();
+    }
+
+    public void deleteUser(){
+        points.get(0).click();
+        deleteUserBtn.click();
+        deleteUserBtn.click();
     }
 }
 
